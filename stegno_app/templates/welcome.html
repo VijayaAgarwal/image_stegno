@@ -1,0 +1,103 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        body {
+            padding-top: 60px;
+        }
+        
+        h2 {
+            margin-left: 20px;
+            padding: 10px 0px;
+        }
+        
+        .is {
+            height: 100%;
+            width: 100%;
+            background-image:url("{% static 'fyp2.jpg'%}");
+            background-size: cover;
+            background-position: center;
+            color: white;
+        }
+        
+        img {
+            height: 500px;
+            width: 500px;
+            margin: 20px 20px;
+            border-radius: 10px;
+        }
+        
+        .img {
+            margin: 0px;
+            padding: 0px;
+            width: 100vw;
+        }
+        
+        .blur {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(4px);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .banner {
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            align-items: center;
+            padding: 20px 10px;
+            background: rgba(38, 75, 186, 0.1);
+            backdrop-filter: blur(4px);
+        }
+        
+        .description {
+            font-family: Verdana, Geneva, Tahoma, sans-serif;
+            font-size: 15px;
+            margin-left: 20px;
+            width: 800px;
+            padding: 50px;
+        }
+    </style>
+</head>
+
+<body>
+    {% include 'navigation2.html' %}
+    <div class="is">
+        <div class="blur">
+            <h2>What is Image Steganography?</h2>
+        </div>
+        <div class="banner">
+            <span class="description">
+                <i>Image steganography</i> is the practice of hiding secret information (like text, files, or other data) within an image in such a way that it is invisible to the human eye.
+                <br><br>
+                The core features:
+                <br>
+                <b>🛡️ AES Encryption</b> – Your message is encrypted before hiding.
+                <br>
+                <b>🖼️ Image Steganography</b>– Embed messages without changing image visibly.
+                <br>
+                <b>🧩 Secure & Simple</b> – No technical skills needed.
+                <br>
+                <b>🌐 Browser-Based </b>– No software install required.
+                <br><br>
+                <b>🧠 What Is LSB Steganography?</b>
+                <br>
+Each pixel in a color image is made of RGB values (Red, Green, Blue), and each of those values is stored as an 8-bit number.
+
+LSB steganography works by modifying the least significant bit of each color value to encode a binary message.
+            </span>
+
+            <img src="{% static 'fyp4.jpg' %}">
+        </div>
+
+    </div>
+</body>
+
+</html>

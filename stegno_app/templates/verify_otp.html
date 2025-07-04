@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        .body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f0f2f5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            padding-top: 60px;
+        }
+        
+        .container {
+            background: white;
+            padding: 40px 30px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.2);
+            width: 350px;
+            text-align: center;
+        }
+        
+        input[type="text"],
+        input[type="email"],
+        input[type="password"],
+        input[type="number"] {
+            width: 90%;
+            padding: 12px 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            outline: none;
+        }
+        
+        button {
+            width: 95%;
+            padding: 12px;
+            margin-top: 15px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        
+        button:hover {
+            background-color: #45a049;
+        }
+        
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+
+
+<body>
+    {% include 'navigation.html' %}
+    <div class="container">
+        <form method="POST">
+            {% csrf_token %}
+            <label>Enter OTP:</label>
+            <input id="ipotp" type="text" name="otp" required> {% if messages %}
+            <ul>
+                {% for message in messages %} {% if 'error' in message.tags %}
+                <p style="color:red;">{{ message }}</p>
+                {% endif %} {% endfor %}
+            </ul>
+            {% endif %}
+            <button id="button" type="submit" onclick="verifyOTP()">Verify OTP</button>
+        </form>
+    </div>
+    <script>
+        const button = document.getElementById("button");
+        const input_otp = document.getElementById("ipotp");
+        const sess_otp = "{{  request.session.otp }}";
+        button.addEventListener("click", function(event) {
+            if (input_otp.value === sess_otp) {
+                alert(" Account created successfully!!");
+            }
+        })
+    </script>
+
+
+</body>
+
+</html>

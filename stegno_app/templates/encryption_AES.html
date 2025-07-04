@@ -1,0 +1,174 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Encyption</title>
+    <style>
+        body {
+            padding-top: 60px;
+            height: 100vh;
+            background-repeat: no-repeat;
+            padding-top: 60px;
+            background-image:url("{% static 'fyp6.webp'%}");
+            background-size: cover;
+            background-position: center;
+        }
+        
+        .output {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        #toast {
+            visibility: hidden;
+            min-width: 200px;
+            background-color: #333;
+            color: #fff;
+            text-align: center;
+            border-radius: 8px;
+            padding: 16px;
+            position: fixed;
+            z-index: 1;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 17px;
+        }
+        
+        #toast.show {
+            visibility: visible;
+            animation: fadein 0.5s, fadeout 0.5s 2.5s;
+        }
+        
+        @keyframes fadein {
+            from {
+                bottom: 0;
+                opacity: 0;
+            }
+            to {
+                bottom: 30px;
+                opacity: 1;
+            }
+        }
+        
+        @keyframes fadeout {
+            from {
+                bottom: 30px;
+                opacity: 1;
+            }
+            to {
+                bottom: 0;
+                opacity: 0;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    {% include 'navigation2.html' %}
+    <!DOCTYPE html>
+    <html>
+
+    <head>
+        <title>Steganography (AES + LSB)</title>
+        <script>
+            function toggleInputs() {
+                const type = document.querySelector('input[name="message_type"]:checked').value;
+                document.getElementById('textInput').style.display = type === 'text' ? 'block' : 'none';
+                document.getElementById('imageInput').style.display = type === 'image' ? 'block' : 'none';
+            }
+        </script>
+    </head>
+
+    <body onload="toggleInputs()">
+        <div class="container">
+            <h1>AES + LSB Steganography</h1>
+            <form method="post" action="{% url 'encryption_AES' %}" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label>Cover Image:</label><br>
+                    <input type="file" name="cover" class="form-control-file" id="imageInput1" accept="image/*" required>
+                </div>
+                <div class="preview">
+
+                    <img id="preview" src="#" alt="Image Preview" style="display:none; max-width: 300px;max-height: 300px;" />
+
+                    <script>
+                        const imageInput = document.getElementById('imageInput1');
+                        const preview = document.getElementById('preview');
+
+                        imageInput.addEventListener('change', function() {
+                            const file = this.files[0];
+
+                            if (file) {
+                                const reader = new FileReader();
+
+                                reader.addEventListener("load", function() {
+                                    preview.src = reader.result;
+                                    preview.style.display = "block";
+                                });
+
+                                reader.readAsDataURL(file);
+                            }
+                        });
+                    </script>
+                </div>
+                <br>
+                <label>Message Type:</label><br>
+                <input type="radio" name="message_type" value="text" checked onchange="toggleInputs()"> Text
+                <input type="radio" name="message_type" value="image" onchange="toggleInputs()"> Image<br><br>
+
+                <div id="textInput">
+                    <label>Text Message:</label><br>
+                    <textarea name="message" rows="4" cols="50"></textarea><br><br>
+                </div>
+
+                <div id="imageInput" style="display:none;">
+                    <label>Secret Image:</label><br>
+                    <input type="file" name="secret" id="imageInput2"><br><br>
+                    <div class="preview">
+
+                        <img id="preview2" src="#" alt="Image Preview" style="display:none; max-width: 300px;max-height: 300px;" />
+
+                        <script>
+                            const imageInputsi = document.getElementById('imageInput2');
+                            const previewsi = document.getElementById('preview2');
+
+                            imageInputsi.addEventListener('change', function() {
+                                const file = this.files[0];
+
+                                if (file) {
+                                    const reader = new FileReader();
+
+                                    reader.addEventListener("load", function() {
+                                        previewsi.src = reader.result;
+                                        previewsi.style.display = "block";
+                                    });
+
+                                    reader.readAsDataURL(file);
+                                }
+                            });
+                        </script>
+                    </div>
+                    <br>
+                </div>
+
+                <button type="submit">Hide Data</button>
+            </form>
+
+            {% if key %}
+            <hr>
+            <h2>Success!</h2>
+            <p><strong>Generated AES Key (Save this to decrypt later):</strong> {{ key }}</p>
+            <p><strong>Preview Stego Image:</strong></p>
+            <img src="data:image/png;base64,{{ image }}" alt="Stego Image" style="max-width:300px;" /><br><br>
+            <p><strong>Download Stego Image:</strong></p>
+            <a href="data:image/png;base64,{{ image }}" download="stego_image.png">Download Image</a> {% endif %}
+        </div>
+    </body>
+
+    </html>

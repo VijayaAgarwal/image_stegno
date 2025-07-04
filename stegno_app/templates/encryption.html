@@ -1,0 +1,143 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Encyption</title>
+    <style>
+        body {
+            height: 100vh;
+            background-repeat: no-repeat;
+            padding-top: 60px;
+            background-image:url("{% static 'fyp6.webp'%}");
+            background-size: cover;
+            background-position: center;
+        }
+        
+        .output {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        #toast {
+            visibility: hidden;
+            min-width: 200px;
+            background-color: #333;
+            color: #fff;
+            text-align: center;
+            border-radius: 8px;
+            padding: 16px;
+            position: fixed;
+            z-index: 1;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 17px;
+        }
+        
+        #toast.show {
+            visibility: visible;
+            animation: fadein 0.5s, fadeout 0.5s 2.5s;
+        }
+        
+        @keyframes fadein {
+            from {
+                bottom: 0;
+                opacity: 0;
+            }
+            to {
+                bottom: 30px;
+                opacity: 1;
+            }
+        }
+        
+        @keyframes fadeout {
+            from {
+                bottom: 30px;
+                opacity: 1;
+            }
+            to {
+                bottom: 0;
+                opacity: 0;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    {% include 'navigation.html' %}
+    <div class="content">
+        <div class="container">
+            <h1 class="text-center">Encrypt Your Image</h1>
+            <form method="post" action="{% url 'encryption' %}" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label>Select an Image</label>
+                    <input type="file" name="image" class="form-control-file" id="imageInput" accept="image/*" required>
+                </div>
+                <div class="preview">
+
+                    <img id="preview" src="#" alt="Image Preview" style="display:none; max-width: 300px;max-height: 300px;" />
+
+                    <script>
+                        const imageInput = document.getElementById('imageInput');
+                        const preview = document.getElementById('preview');
+
+                        imageInput.addEventListener('change', function() {
+                            const file = this.files[0];
+
+                            if (file) {
+                                const reader = new FileReader();
+
+                                reader.addEventListener("load", function() {
+                                    preview.src = reader.result;
+                                    preview.style.display = "block";
+                                });
+
+                                reader.readAsDataURL(file);
+                            }
+                        });
+                    </script>
+                </div>
+                <div class="form-group">
+                    <label>Enter the Text : </label>
+                    <textarea name="text" class="form-control" required rows="'3"></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary">Submit</button>
+
+            </form>
+
+        </div>
+        <div class="output container">
+            <p align="center">{{message}}</p>
+            {% if image_path %}
+            <img src="{{ image_path }}" style=" max-width: 300px;max-height: 300px;" />
+
+            <a href="{{ image_path }}" download>
+                <button id="download" style="margin-top: 20px; padding: 10px 20px; font-size: 16px;">Download Image Manually</button>
+            </a>
+            <br><br>
+            <div id="toast">Image is downloading...</div>
+
+            <script>
+                const download = document.getElementById('download')
+                download.addEventListener('click', function() {
+                    // Show the toast
+                    var toast = document.getElementById("toast");
+                    toast.className = "show";
+
+                    // Hide toast after 3 seconds
+                    setTimeout(function() {
+                        toast.className = toast.className.replace("show", "");
+                    }, 3000);
+                });
+            </script>
+            {% endif %}
+        </div>
+    </div>
+</body>
+
+</html>

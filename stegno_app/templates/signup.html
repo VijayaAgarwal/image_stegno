@@ -1,0 +1,100 @@
+{% csrf_token %} {% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f0f2f5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0px;
+            padding-top: 40px;
+        }
+        
+        .container {
+            background: white;
+            padding: 40px 30px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.2);
+            width: 350px;
+            text-align: center;
+        }
+        
+        input[type="text"],
+        input[type="email"],
+        input[type="password"],
+        input[type="number"] {
+            width: 90%;
+            padding: 12px 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            outline: none;
+        }
+        
+        button {
+            width: 95%;
+            padding: 12px;
+            margin-top: 15px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        
+        button:hover {
+            background-color: #45a049;
+        }
+        
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+    {% include 'navigation.html' %}
+
+    <div class="container">
+        <h2>Sign Up</h2>
+        <form method="POST">
+            <div id="signup-box" {% if otp_sent %} class="hidden" {% endif %}>
+
+                {% csrf_token %} {% load static %}
+                <input type="hidden" name="stage" value="sign_up">
+                <input name="name" type="text" id="name" placeholder="Full Name"><br>
+                <input name="email" type="email" id="email" placeholder="Email Address" required><br>
+                <input name="password" type="password" id="password" placeholder="Password" required><br>
+                <button type="submit" onclick="sendOTP()">SEND OTP</button>
+
+            </div>
+        </form>
+        <script>
+            function sendOTP() {
+                var name = document.getElementById('name').value;
+                var email = document.getElementById('email').value;
+                var password = document.getElementById('password').value;
+
+                if (email && password) {
+                    alert('OTP sent to your Email (simulated)');
+
+
+                } else {
+                    alert('Please fill all fields.');
+                }
+            }
+        </script>
+
+    </div>
+</body>
+
+</html>

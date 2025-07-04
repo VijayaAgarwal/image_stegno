@@ -1,0 +1,208 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Steganography Project</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+    <style>
+        body {
+            padding-top: 60px;
+        }
+        
+        h2 {
+            margin-left: 20px;
+            padding: 10px 0px;
+        }
+        
+        .is {
+            height: 100%;
+            width: 100%;
+            background-image:url("{% static 'fyp2.jpg'%}");
+            background-size: cover;
+            background-position: center;
+            color: white;
+        }
+        
+        .first {
+            height: 100%;
+            width: 100%;
+            background-image:url("{% static 'fyp1.jpg'%}");
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        img {
+            height: 500px;
+            width: 500px;
+            margin: 20px 20px;
+            border-radius: 10px;
+        }
+        
+        .img {
+            margin: 0px;
+            padding: 0px;
+            width: 100vw;
+        }
+        
+        .blur {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(4px);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .banner {
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            align-items: center;
+            padding: 20px 10px;
+            background: rgba(38, 75, 186, 0.1);
+            backdrop-filter: blur(4px);
+        }
+        
+        .box {
+            margin: 85px;
+            background-color: rgba(97, 178, 185, 0.225);
+            padding: 15px;
+            border-radius: 10px;
+            width: 30%;
+            font-family: Verdana, Geneva, Tahoma, sans-serif;
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            color: rgb(255, 255, 255);
+            text-align: center;
+            min-width: 300px;
+        }
+        
+        input[type="email"],
+        input[type="password"],
+        input[type="text"] {
+            margin: 10px 0 0 0;
+            width: 100%;
+            min-height: 2em;
+            background-color: rgba(195, 195, 211, 0.716);
+            color: #010741;
+            border: none;
+            border-radius: 10px;
+        }
+        
+        button[type="submit"] {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 60%;
+            margin: 1em auto;
+            height: 1.5em;
+            font-size: 1.3rem;
+            background-color: rgb(9, 5, 93);
+            border: 2px solid #010d41;
+            color: white;
+        }
+        
+        button[type="submit"]:hover {
+            color: #010d41;
+            background-color: rgb(220, 216, 229);
+        }
+        
+        .password {
+            display: flex;
+            flex-direction: row;
+        }
+        
+        i {
+            margin-top: 10px;
+            margin-left: 5px;
+            cursor: pointer;
+        }
+        
+        .description {
+            font-family: Verdana, Geneva, Tahoma, sans-serif;
+            font-size: 15px;
+            margin-left: 20px;
+            width: 800px;
+            padding: 50px;
+        }
+    </style>
+</head>
+
+<body>
+    {% include 'navigation.html' %}
+
+
+    <div class="is">
+        <div class="blur">
+            <h2>What is Image Steganography?</h2>
+        </div>
+        <div class="banner">
+            <span class="description">
+                <i>Image steganography</i> is the practice of hiding secret information (like text, files, or other data) within an image in such a way that it is invisible to the human eye.
+                <br><br>
+                The core features:
+                <br>
+                <b>🛡️ AES Encryption</b> – Your message is encrypted before hiding.
+                <br>
+                <b>🖼️ Image Steganography</b>– Embed messages without changing image visibly.
+                <br>
+                <b>🧩 Secure & Simple</b> – No technical skills needed.
+                <br>
+                <b>🌐 Browser-Based </b>– No software install required.
+                <br><br>
+                <b>🧠 What Is LSB Steganography?</b>
+                <br>
+Each pixel in a color image is made of RGB values (Red, Green, Blue), and each of those values is stored as an 8-bit number.
+
+LSB steganography works by modifying the least significant bit of each color value to encode a binary message.
+            </span>
+
+            <img src="{% static 'fyp4.jpg' %}">
+        </div>
+
+    </div>
+    <div class="first" id="login">
+
+        <div class="box">
+            <h2>Login Form</h2>
+            <form method="post">
+                {% csrf_token %} {% load static %}
+                <label for="email">User Email :<input type="email" placeholder="Enter email " name="email" required></label>
+
+                <label for="password">Password :
+                    <div class="password"><input id="password" type="password" placeholder="Enter password" name="password" required>
+                <i id="visibilityBtn"><span class="material-symbols-outlined">
+                    visibility
+                    </span></i></div>
+                </label>
+                <button type="submit" value="submit"><b>Login</b></button><br>
+                <p class="register">Don't have an account ? <a href="http://localhost:8000/signup/ ">Register</a></p>
+            </form>
+        </div>
+    </div>
+    <script>
+        const visibilityBtn = document.getElementById("visibilityBtn")
+
+        visibilityBtn.addEventListener("click", toggleVisibility)
+
+        function toggleVisibility() {
+            const passwordInput = document.getElementById("password")
+            if (passwordInput.type === "password") {
+                passwordInput.type = "text"
+            } else {
+                passwordInput.type = "password"
+            }
+        }
+    </script>
+
+</body>
+
+</html>

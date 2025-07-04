@@ -1,0 +1,75 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Decryption</title>
+    <style>
+        body {
+            padding-top: 60px;
+            height: 100vh;
+            background-repeat: no-repeat;
+            padding-top: 60px;
+            background-image:url("{% static 'fyp6.webp'%}");
+            background-size: cover;
+            background-position: center;
+        }
+    </style>
+</head>
+
+<body>
+    {% include 'navigation2.html' %}
+    <div class="container">
+        <h1>Decode & Decrypt</h1>
+        <form method="post" action="{% url 'decryption_AES' %}" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="form-group">
+                <label>Stego Image:</label><br>
+                <input type="file" name="stego_image" id="imageInput1" required><br>
+            </div>
+            <div class="preview">
+
+                <img id="preview" src="#" alt="Image Preview" style="display:none; max-width: 300px;max-height: 300px;" />
+
+                <script>
+                    const imageInput = document.getElementById('imageInput1');
+                    const preview = document.getElementById('preview');
+
+                    imageInput.addEventListener('change', function() {
+                        const file = this.files[0];
+
+                        if (file) {
+                            const reader = new FileReader();
+
+                            reader.addEventListener("load", function() {
+                                preview.src = reader.result;
+                                preview.style.display = "block";
+                            });
+
+                            reader.readAsDataURL(file);
+                        }
+                    });
+                </script>
+            </div>
+
+            <label>AES Key:</label><br>
+            <input type="text" name="key" required><br><br>
+
+            <button type="submit">Decode</button>
+        </form>
+
+        {% if result_text %}
+        <hr>
+        <h2>Decrypted Text:</h2>
+        <p>{{ result_text }}</p>
+        {% elif result_image %}
+        <hr>
+        <h2>Decrypted Image:</h2>
+        <img src="data:image/png;base64,{{ result_image }}" alt="Hidden Image" style="max-width:300px;" /><br><br>
+        <a href="data:image/png;base64,{{ result_image }}" download="recovered_secret.png">Download Recovered Image</a> {% endif %}
+    </div>
+</body>
+
+</html>
